@@ -15,6 +15,10 @@ void createTaskList(const char* fileName) {
 	Task task;
 
 	ofstream outF(fileName, ios::binary);
+	if (!outF) {
+		cerr << "Error: file \"" << fileName << "\" could not be opened" << endl;
+		exit(1);
+	}
 
 	cout << "Enter number of tasks: "; cin >> numOfTasks;
 	cin.ignore();
@@ -63,14 +67,20 @@ void displayTaskList(vector<Task> taskList) {
 vector<Task> getTaskList(const char* fileName) {
 	Task task;
 	vector<Task> taskList;
+
 	ifstream inF(fileName, ios::binary);
+	if (!inF) {
+		cerr << "Error: file \"" << fileName << "\" could not be opened" << endl;
+		exit(1);
+	}
+
 	while (inF.read((char*)&task, sizeof(task)))
 		taskList.push_back(task);
 	inF.close();
 	return taskList;
 }
 
-static bool compareTasks(Task t1, Task t2) {
+bool compareTasks(Task t1, Task t2) {
 	return (t1.startTime < t2.startTime);
 }
 
@@ -89,7 +99,7 @@ void findTheNearestTask(vector<Task> taskList) {
 	for (size_t i = 0; i < taskList.size(); i++) {
 		task = taskList.at(i);
 		if (task.startTime > currentTime) {
-			printf("\nCurrent time: %02d:%02d", currentTime / 60, currentTime % 60);
+			printf("\nCurrent time: %02d:%02d", tm_local->tm_hour, tm_local->tm_min);
 			printf("\nThe next task is:\n");
 			displayTask(task);
 			return;
@@ -99,9 +109,14 @@ void findTheNearestTask(vector<Task> taskList) {
 }
 
 void createSpareTimeList(vector<Task> taskList, const char* fileName) {
-	ofstream outF(fileName, ios::binary);
 	Task currentTask, nextTask, spareTime;
 	int a, b; //start & end of a task
+
+	ofstream outF(fileName, ios::binary);
+	if (!outF) {
+		cerr << "Error: file \"" << fileName << "\" could not be opened" << endl;
+		exit(1);
+	}
 
 	for (size_t i = 0; i < taskList.size() - 1; i++) {
 		currentTask = taskList.at(i);

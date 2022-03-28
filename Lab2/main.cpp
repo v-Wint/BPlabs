@@ -2,24 +2,27 @@
 
 int main()
 {
-	createTaskList("tasklist.dat");
+	const char* taskListPath = "tasklist.bin";
+	const char* spareTimePath = "sparelist.bin";
 
-	std::vector<Task> taskList = getTaskList("tasklist.dat");
+	createTaskList(taskListPath);
+
+	std::vector<Task> taskList = getTaskList(taskListPath);
 	sortTaskList(taskList);
 	printf("\nList of tasks:\n");
 	displayTaskList(taskList);
 
 	findTheNearestTask(taskList);
 
-	createSpareTimeList(taskList, "sparelist.dat");
+	createSpareTimeList(taskList, spareTimePath);
 	
-	taskList = getTaskList("sparelist.dat");
+	taskList = getTaskList(spareTimePath);
 	if (!taskList.empty()) {
 		printf("\nSpare time after 13:00 : \n");
 		displayTaskList(taskList);
 	}
 	else {
-		printf("\nNo spare time after 13:00 : \n");
+		printf("\nNo spare time after 13:00\n");
 	}
 }	
 
