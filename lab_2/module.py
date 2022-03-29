@@ -106,9 +106,9 @@ def get_task_list(file_name) -> list:
     '''
 
     task_list = []
-    task = Task()
     with open(file_name, 'rb') as f:
         while True:
+            task = Task()
             task.name = f.read(100).decode().rstrip('\0')
             if not task.name: # if not eof
                 break
