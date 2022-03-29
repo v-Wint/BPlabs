@@ -3,15 +3,36 @@ class Task(object):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-def write_to_file(f, *args):
+def write_to_file(f, *args) -> None:
+    '''Write args to the file one by one
+
+    Parameters
+    ----------
+    file : <_io.BufferedWriter>
+        Python file object to write
+    args : list, optional
+        Values to write 
+    '''
+
     for arg in args:
         if isinstance(arg, str):
-            arg = arg + '\0'*(100-len(arg))
+            arg = arg + '\0'*(100-len(arg)) #100 bytes
             f.write(bytes(arg.encode()))
         elif isinstance(arg, int):
-            f.write(arg.to_bytes(4, byteorder='big'))
+            f.write(arg.to_bytes(4, byteorder='big')) #4 bytes
 
-def create_task_list(file_name):
+def create_task_list(file_name) -> None:
+    '''Write a number of tasks to file
+    The user is asked information about: number of tasks, 
+    name of each task, start time of each task, duration of each task.
+    Name, start time, duration and end time of the tasks are written
+    
+    Parameters
+    ----------
+    file_name : str
+        The path to the file
+    '''
+
     n = int(input("Enter number of tasks: "))
     with open(file_name, 'wb') as f:
         for i in range(1, n+1):
@@ -24,9 +45,6 @@ def create_task_list(file_name):
                         break
                 except:
                     pass
-                
-
-            s = s + '\0'*(100 - len(s))
 
             # start time
             while True:
@@ -55,7 +73,9 @@ def create_task_list(file_name):
 
             write_to_file(f, s, start_time, duration, end_time)
 
-def display_task(task):
+def display_task(task) -> None:
+    '''Print out task information'''
+
     print("{:>15s}:   {:02d}:{:02d}--->{:02d}:{:02d}--->{:02d}:{:02d}".format(
           task.name, 
           task.start_time // 60, 
@@ -65,11 +85,26 @@ def display_task(task):
 		  task.end_time // 60, 
           task.end_time % 60));
 
-def display_task_list(task_list):
+def display_task_list(task_list) -> None:
+    '''Print out information of tasks from task list'''
+
     for task in task_list:
         display_task(task)
 
-def get_task_list(file_name):
+def get_task_list(file_name) -> list:
+    '''Read tasks from a file and create a list of them
+
+    Parameters
+    ----------
+    file_name : str
+        The path to the file to read
+
+    Returns
+    ----------
+    task_list : list
+        list of tasks
+    '''
+
     task_list = []
     task = Task()
     with open(file_name, 'rb') as f:
@@ -84,10 +119,15 @@ def get_task_list(file_name):
     return task_list
 
 
-def sort_task_list(task_list):
+def sort_task_list(task_list) -> list:
+    '''Get sorted task lsit by the start time'''
     return sorted(task_list, key = lambda task : task.start_time)
 
-def find_the_nearest_task(task_list):
+def find_the_nearest_task(task_list) -> None:
+    '''Find the nearest task after the current time
+    Print out information about that task
+    '''
+
     local_time = dt.now()
     current_time = local_time.hour*60 + local_time.minute
     
@@ -101,11 +141,20 @@ def find_the_nearest_task(task_list):
 
     print("\nYou've got no task left")
 
-def create_spare_time_list(task_list, spare_time_path):
+def create_spare_time_list(task_list, spare_time_path) -> None:
+    '''Write to the file a number of tasks in which each task represents the spare time after 13:00
+
+    Parameters
+    ----------
+    task_list : list
+        list of current tasks
+    spare_time_path : str
+        path to the file to write
+    '''
     with open(spare_time_path, 'wb') as f:
         for i in range(len(task_list)-1):
             current_task = task_list[i]
-            next_task = task_list[i+1] if len(task_list) > 1 else task_list[i]
+            next_task = task_list[i+1] if len(task_list) > 1 else task_list[i] #if only one task in the list
 
             a = current_task.start_time
             b = current_task.end_time
