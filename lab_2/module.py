@@ -32,19 +32,22 @@ def create_task_list(file_name) -> None:
     file_name : str
         The path to the file
     '''
+    while True:
+        try:
+            n = int(input("Enter number of tasks: "))
+        except ValueError: 
+            pass
+        else:
+            break
 
-    n = int(input("Enter number of tasks: "))
     with open(file_name, 'wb') as f:
         for i in range(1, n+1):
 
             # task name
             while True:
-                try:
-                    s = input(f"({i}) Task name: ")
-                    if len(s) < 100:
-                        break
-                except:
-                    pass
+                s = input(f"({i}) Task name: ")
+                if len(s) < 100:
+                    break
 
             # start time
             while True:
@@ -53,7 +56,7 @@ def create_task_list(file_name) -> None:
                     h, m = int(h), int(m)
                     if h >= 0 and h < 24 and m >= 0 and m < 60:
                         break
-                except:
+                except ValueError:
                     pass
                     
             start_time = h * 60 + m
@@ -65,7 +68,7 @@ def create_task_list(file_name) -> None:
                     h, m = int(h), int(m)
                     if h >= 0 and h < 24 and m >= 0 and m < 60:
                         break
-                except:
+                except ValueError:
                     pass
 
             duration = h * 60 + m
