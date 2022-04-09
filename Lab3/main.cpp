@@ -14,6 +14,11 @@ int main() {
 
 	printf("List of students:\n");
 	displayStudentList(studentList, size);
-	printf("\nThe oldest student:\n%s\n", getTheOldestStudent(studentList, size).getStudentInformation().c_str());
 
+	std::string group = "ip-12";
+
+	printf("\nList of students in %s group:\n", group.c_str());
+	Student oldestStudent = getTheOldestStudent(studentList, "ip-12", size);
+	printf("\nThe oldest student:\n%s\n", oldestStudent.getStudentInformation().c_str());
+	printf("\nAge: %d years", oldestStudent.getBirthDate().getAgeYears());
 }

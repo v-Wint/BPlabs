@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -27,6 +29,24 @@ std::string Date::getDate() {
 	return buf;
 };
 
+int Date:: getAgeYears() {
+	time_t curr_time = time(NULL);
+	tm* tm_local = localtime(&curr_time);
+	
+	int age = tm_local->tm_year + 1900 - this->year;
+
+	int currentDay = tm_local->tm_mday, 
+		currentMonth = tm_local->tm_mon;
+
+	if (currentMonth - this->month > 0)
+		return age;
+	if (currentMonth - this->month < 0)
+		return --age;
+	if (currentDay - this->day >= 0)
+		return age;
+	if (currentDay - this->day < 0)
+		return age--;
+}
 
 FullName::FullName(std::string firstName, std::string secondName, std::string parentName) {
 	this->firstName = firstName; this->secondName = secondName; this->parentName = parentName;
@@ -56,7 +76,10 @@ Student::Student(std::string fullName, std::string groupNumber, std::string birt
 	this->birthDate = Date(birthDate);
 }
 std::string Student::getStudentInformation() {
-	return fullName.getFullName() + ' ' + groupNumber + ' ' + birthDate.getDate();
+	using namespace std;
+	stringstream ss;
+	ss << left <<setw(40) << fullName.getFullName() << setw(10) << groupNumber << setw(10) << birthDate.getDate();
+	return ss.str();
 }
 
 Student* getStudentList(const char* fileName, size_t size) {
@@ -81,7 +104,7 @@ Student* getStudentList(const char* fileName, size_t size) {
 		fullName = w;
 		for (size_t i = 2; i < 9; i++)getline(ss, w, ',');	//skip n cols
 		birthDate = w;
-		groupNumber = "ip-" + to_string(rand() % 10 + 10);	//random group number
+		groupNumber = "ip-" + to_string(rand() % 4 + 10);	//random group number
 		studentList[j++] = Student(fullName, groupNumber, birthDate);
 	}
 	f.close();
@@ -93,16 +116,23 @@ void displayStudentList(Student* studentList, size_t size) {
 		std::cout << studentList[i].getStudentInformation() << std::endl;
 }
 
-Student getTheOldestStudent(Student* studentList, size_t size) {
-	Student currStudent,  oldestStudent = studentList[0];
+Student getTheOldestStudent(Student* studentList, std::string groupNumber, size_t size) {
+	Student currStudent, oldestStudent;
+	bool f = true;
+	for (size_t i = 0; i < size; i++) {
+		if (studentList[i].getGroupNumber() != groupNumber)
+			continue;
 
-	for (size_t i = 1; i < size; i++) {
 		currStudent = studentList[i];
+		std::cout << currStudent.getStudentInformation() << std::endl;
+
+		if (f) { //first student to compare
+			oldestStudent = currStudent; f = false; continue;
+		}
 
 		if (currStudent.getBirthDate().getYear() < oldestStudent.getBirthDate().getYear()){
 			oldestStudent = currStudent; continue;
 		}
-		
 		if (currStudent.getBirthDate().getYear() > oldestStudent.getBirthDate().getYear())
 			continue;
 		
@@ -111,6 +141,7 @@ Student getTheOldestStudent(Student* studentList, size_t size) {
 		}
 		if (currStudent.getBirthDate().getMonth() > oldestStudent.getBirthDate().getMonth())
 			continue;
+
 		if (currStudent.getBirthDate().getDay() < oldestStudent.getBirthDate().getDay()) {
 			oldestStudent = currStudent; continue;
 		}
