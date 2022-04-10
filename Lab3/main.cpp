@@ -20,5 +20,5 @@ int main() {
 	printf("\nList of students in %s group:\n", group.c_str());
 	Student oldestStudent = getTheOldestStudent(studentList, "ip-12", size);
 	printf("\nThe oldest student:\n%s\n", oldestStudent.getStudentInformation().c_str());
-	printf("\nAge: %d years", oldestStudent.getBirthDate().getAgeYears());
+	printf("\nAge: %d years\n", oldestStudent.getBirthDate().getAgeYears());
 }

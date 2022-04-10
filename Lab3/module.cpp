@@ -7,10 +7,6 @@
 #include "module.h"
 
 
-Date::Date(int day, int month, int year) {
-	this->day = day; this->month = month; this->year = year;
-}
-
 Date::Date(std::string str) {
 	using namespace std;
 	stringstream ss(str);
@@ -48,10 +44,6 @@ int Date:: getAgeYears() {
 		return age--;
 }
 
-FullName::FullName(std::string firstName, std::string secondName, std::string parentName) {
-	this->firstName = firstName; this->secondName = secondName; this->parentName = parentName;
-}
-
 FullName::FullName(std::string fullName) {
 	using namespace std;
 	stringstream ss(fullName);
@@ -67,14 +59,6 @@ std::string FullName::getFullName() {
 	return firstName + ' ' + secondName + ' ' + parentName;
 }
 
-Student::Student(FullName fullName, std::string groupNumber, Date birthDate) {
-	this->fullName = fullName; this->groupNumber = groupNumber; this->birthDate = birthDate;
-}
-Student::Student(std::string fullName, std::string groupNumber, std::string birthDate) {
-	this->fullName = FullName(fullName);
-	this->groupNumber = groupNumber;
-	this->birthDate = Date(birthDate);
-}
 std::string Student::getStudentInformation() {
 	using namespace std;
 	stringstream ss;
@@ -95,9 +79,8 @@ Student* getStudentList(const char* fileName, size_t size) {
 
 	//read full name, date from csv file, get random group number
 	string line, w, fullName, birthDate, groupNumber;
-	size_t j = 0;
 	getline(f, line); //skip the first line
-	while (!f.eof()) {
+	for (size_t i = 0; (!f.eof()) && (i < size); i++) {
 		getline(f, line);
 		stringstream ss(line);
 		for (size_t i = 0; i < 2; i++)getline(ss, w, ',');	//skip two cols
@@ -105,7 +88,7 @@ Student* getStudentList(const char* fileName, size_t size) {
 		for (size_t i = 2; i < 9; i++)getline(ss, w, ',');	//skip n cols
 		birthDate = w;
 		groupNumber = "ip-" + to_string(rand() % 4 + 10);	//random group number
-		studentList[j++] = Student(fullName, groupNumber, birthDate);
+		studentList[i] = Student(fullName, groupNumber, birthDate);
 	}
 	f.close();
 	return studentList;
@@ -113,7 +96,7 @@ Student* getStudentList(const char* fileName, size_t size) {
 
 void displayStudentList(Student* studentList, size_t size) {
 	for (size_t i = 0; i < size; i++)
-		std::cout << studentList[i].getStudentInformation() << std::endl;
+		printf("%-3d%s\n", i + 1, studentList[i].getStudentInformation().c_str());
 }
 
 Student getTheOldestStudent(Student* studentList, std::string groupNumber, size_t size) {
@@ -124,7 +107,7 @@ Student getTheOldestStudent(Student* studentList, std::string groupNumber, size_
 			continue;
 
 		currStudent = studentList[i];
-		std::cout << currStudent.getStudentInformation() << std::endl;
+		printf("%-3d%s\n", i + 1,currStudent.getStudentInformation().c_str());
 
 		if (f) { //first student to compare
 			oldestStudent = currStudent; f = false; continue;

@@ -1,8 +1,8 @@
 class Date {
 	int day, month, year;
 public:
-	Date() = default;
-	Date(int, int, int);
+	Date() : day(1), month(1), year(1900) {};
+	Date(int day, int month, int year) : day(day), month(month), year(year) {};
 	Date(std::string);
 	~Date() {};
 	
@@ -18,8 +18,8 @@ public:
 class FullName {
 	std::string firstName, secondName, parentName;
 public:
-	FullName() = default;
-	FullName(std::string, std::string, std::string);
+	FullName() : firstName(""), secondName(""), parentName("") {};
+	FullName(std::string firstName, std::string secondName, std::string parentName) : firstName(firstName), secondName(secondName), parentName(parentName) {};
 	FullName(std::string);
 	~FullName() {};
 
@@ -36,10 +36,11 @@ class Student {
 	std::string groupNumber;
 	Date birthDate;
 public:
-	Student() = default;
-	Student(FullName, std::string, Date);
-	Student(std::string, std::string, std::string);
+	Student() : fullName(FullName()), groupNumber(""), birthDate(Date()) {};
+	Student(FullName fullName, std::string groupNumber, Date birthDate) : fullName(fullName), groupNumber(groupNumber), birthDate(birthDate) {};
+	Student(std::string fullName, std::string groupNumber, std::string birthDate) : fullName(FullName(fullName)), groupNumber(groupNumber), birthDate(Date(birthDate)) {};
 	~Student() {};
+
 	std::string getStudentInformation();
 
 	FullName getFullName() { return fullName; };
