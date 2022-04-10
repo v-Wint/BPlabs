@@ -1,7 +1,9 @@
 from datetime import datetime as dt
 class Task(object):
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
+    name: str
+    start_time: int
+    duration: int
+    end_time: int
 
 def write_to_file(f, *args) -> None:
     '''Write args to the file one by one
@@ -157,7 +159,7 @@ def create_spare_time_list(task_list, spare_time_path) -> None:
     with open(spare_time_path, 'wb') as f:
         for i in range(len(task_list)-1):
             current_task = task_list[i]
-            next_task = task_list[i+1] if len(task_list) > 1 else task_list[i] #if only one task in the list
+            next_task = task_list[i+1] 
 
             a = current_task.start_time
             b = current_task.end_time
@@ -170,6 +172,9 @@ def create_spare_time_list(task_list, spare_time_path) -> None:
                 if b - a > 0 : #get the last task and check if there is spare time before 24:00
                     write_to_file(f, "spare", a, b - a, b)
 
-            b = task_list[-1].end_time
-            if b < 24*60:
+        b = task_list[-1].end_time
+        if b < 24*60:
+            if b > 13*60:
                 write_to_file(f, "spare", b, 24*60 - b, 24*60)
+            else:
+                write_to_file(f, "spare", 13*60, 11 * 60, 24 * 60)

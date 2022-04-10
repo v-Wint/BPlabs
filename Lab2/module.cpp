@@ -140,11 +140,13 @@ void createSpareTimeList(vector<Task> taskList, const char* fileName) {
 			}
 		}
 	}
-
-	b = taskList.at(taskList.size() - 1).endTime; //get the last task and check if there is spare time before 24:00
-	if (b < 24 * 60) {
-		spareTime = { "spare", b, 24 * 60 - b, 24 * 60 };
-
+	
+	b = taskList.at(taskList.size() - 1).endTime;	//get the last task and check if there is spare time before 24:00
+	if  (b < 24 * 60) {
+		if (b > 13*60) 
+			spareTime = { "spare", b, 24 * 60 - b, 24 * 60 };
+		else
+			spareTime = { "spare", 13*60, 11*60, 24 * 60 };
 		outF.write((char*)&spareTime, sizeof(Task));
 	}
 	outF.close();
