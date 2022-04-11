@@ -19,7 +19,7 @@ def write_to_file(f, *args) -> None:
 
     for arg in args:
         if isinstance(arg, str):
-            arg = arg + '\0'*(100-len(arg)) #100 bytes
+            arg = arg + '\0'*(100-len(bytes(arg.encode()))) #100 bytes
             f.write(bytes(arg.encode()))
         elif isinstance(arg, int):
             f.write(arg.to_bytes(4, byteorder='big')) #4 bytes
