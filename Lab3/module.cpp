@@ -102,6 +102,7 @@ void displayStudentList(Student* studentList, size_t size) {
 Student getTheOldestStudent(Student* studentList, std::string groupNumber, size_t size) {
 	Student currStudent, oldestStudent;
 	bool f = true;
+	printf("\nList of students in %s group:\n", groupNumber.c_str());
 	for (size_t i = 0; i < size; i++) {
 		if (studentList[i].getGroupNumber() != groupNumber)
 			continue;
