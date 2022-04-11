@@ -3,7 +3,7 @@ class Date {
 public:
 	Date() : day(1), month(1), year(1900) {};
 	Date(int day, int month, int year) : day(day), month(month), year(year) {};
-	Date(std::string);
+	Date(std::string);		//dd.mm.yyyy format
 	~Date() {};
 	
 	std::string getDate();

@@ -34,13 +34,13 @@ int Date:: getAgeYears() {
 	int currentDay = tm_local->tm_mday, 
 		currentMonth = tm_local->tm_mon;
 
-	if (currentMonth - this->month > 0)
+	if (currentMonth > this->month)
 		return age;
-	if (currentMonth - this->month < 0)
+	if (currentMonth < this->month)
 		return --age;
-	if (currentDay - this->day >= 0)
+	if (currentDay >= this->day)
 		return age;
-	if (currentDay - this->day < 0)
+	if (currentDay < this->day)
 		return age--;
 }
 
