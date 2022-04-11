@@ -59,9 +59,8 @@ void displayTask(Task task) {
 }
 
 void displayTaskList(vector<Task> taskList) {
-	Task task;
-	for (size_t i = 0; i < taskList.size(); i++)
-		displayTask(taskList.at(i));
+	for (Task &task : taskList)
+		displayTask(task);
 }
 
 vector<Task> getTaskList(const char* fileName) {
@@ -93,13 +92,13 @@ void findTheNearestTask(vector<Task> taskList) {
 	time_t curr_time = time(NULL);
 	tm* tm_local = localtime(&curr_time);
 	int currentTime = tm_local->tm_hour * 60 + tm_local->tm_min;
+	printf("\nCurrent time: %02d:%02d", tm_local->tm_hour, tm_local->tm_min);
 
 	//sorted vector
 	Task task;
 	for (size_t i = 0; i < taskList.size(); i++) {
 		task = taskList.at(i);
 		if (task.startTime > currentTime) {
-			printf("\nCurrent time: %02d:%02d", tm_local->tm_hour, tm_local->tm_min);
 			printf("\nThe next task is:\n");
 			displayTask(task);
 			return;
@@ -124,18 +123,17 @@ void createSpareTimeList(vector<Task> taskList, const char* fileName) {
 
 		a = currentTask.startTime;
 		b = currentTask.endTime;
-		if (b >= 13 * 60) { //if ends after 13:00
+		if (b >= 13 * 60) {				//if ends after 13:00
 
-			if (a > 13 * 60) { //	check if there is spare time after 13:00, if so, add additional spare time interval
+			if (a > 13 * 60) {			//check if there is spare time after 13:00, if so, add additional spare time interval
 				spareTime = { "spare", 13 * 60, a - 13 * 60, a };
 				outF.write((char*)&spareTime, sizeof(Task));
 			}
 
 			a = currentTask.endTime;
 			b = nextTask.startTime;
-			if (b - a > 0) {
+			if (b - a > 0) {			//if spare time between current and next task
 				spareTime = { "spare", a, b - a, b };
-
 				outF.write((char*)&spareTime, sizeof(Task));
 			}
 		}
@@ -150,4 +148,14 @@ void createSpareTimeList(vector<Task> taskList, const char* fileName) {
 		outF.write((char*)&spareTime, sizeof(Task));
 	}
 	outF.close();
+}
+
+void displaySpareTimeList(vector<Task> taskList) {
+	if (!taskList.empty()) {
+		printf("\nSpare time after 13:00 : \n");
+		displayTaskList(taskList);
+	}
+	else {
+		printf("\nNo spare time after 13:00\n");
+	}
 }

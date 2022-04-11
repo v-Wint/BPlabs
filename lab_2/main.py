@@ -15,12 +15,8 @@ def main():
 
     create_spare_time_list(task_list, spare_time_path)
 
-    task_list = get_task_list(spare_time_path)
-    if task_list:
-        print("\nSpare time after 13:00")
-        display_task_list(task_list)
-    else:
-        print("\nNo spare time after 13:00")
+    display_spare_time_list(get_task_list(spare_time_path))
 
 if __name__ == "__main__":
     main()
+

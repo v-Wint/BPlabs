@@ -9,6 +9,7 @@ int main()
 
 	std::vector<Task> taskList = getTaskList(taskListPath);
 	sortTaskList(taskList);
+
 	printf("\nList of tasks:\n");
 	displayTaskList(taskList);
 
@@ -16,13 +17,5 @@ int main()
 
 	createSpareTimeList(taskList, spareTimePath);
 	
-	taskList = getTaskList(spareTimePath);
-	if (!taskList.empty()) {
-		printf("\nSpare time after 13:00 : \n");
-		displayTaskList(taskList);
-	}
-	else {
-		printf("\nNo spare time after 13:00\n");
-	}
+	displaySpareTimeList(getTaskList(spareTimePath));
 }	
-

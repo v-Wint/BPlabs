@@ -5,6 +5,7 @@ class Task(object):
     duration: int
     end_time: int
 
+
 def write_to_file(f, *args) -> None:
     '''Write args to the file one by one
 
@@ -135,11 +136,11 @@ def find_the_nearest_task(task_list) -> None:
 
     local_time = dt.now()
     current_time = local_time.hour*60 + local_time.minute
+    print("\nCurrent time: {:02d}:{:02d}".format(
+                local_time.hour, local_time.minute))
     
     for task in task_list:
         if task.start_time > current_time:
-            print("\nCurrent time: {:02d}:{:02d}".format(
-                local_time.hour, local_time.minute))
             print("The next task is:")
             display_task(task)
             return
@@ -178,3 +179,18 @@ def create_spare_time_list(task_list, spare_time_path) -> None:
                 write_to_file(f, "spare", b, 24*60 - b, 24*60)
             else:
                 write_to_file(f, "spare", 13*60, 11 * 60, 24 * 60)
+
+def display_spare_time_list(task_list):
+    '''Display list of spare time intervals if not empty, then message
+
+    Parameters
+    ----------
+    task_list : list
+        list of spare time intervals
+    '''
+
+    if task_list:
+        print("\nSpare time after 13:00")
+        display_task_list(task_list)
+    else:
+        print("\nNo spare time after 13:00")
